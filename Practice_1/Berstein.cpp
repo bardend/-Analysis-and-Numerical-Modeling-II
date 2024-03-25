@@ -10,7 +10,6 @@ namespace plt = matplotlibcpp;
 using namespace std;
 using namespace plt;
 
-
 template <class T>
 class Berstein {
 private:
