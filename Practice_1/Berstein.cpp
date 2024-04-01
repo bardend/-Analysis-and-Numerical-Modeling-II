@@ -55,14 +55,17 @@ double f2(double x){
 }
 
 int main(){
-    Berstein<decltype(f)*> ob1(f, 12);
-    Berstein<decltype(f)*> ob2(f2, 15);
 
-    pair<vector<double>, vector<double>> tmp = ob1.generate();
-    pair<vector<double>, vector<double>> tmp2 = ob2.generate();
+    vector<std::string> colors = {"r-", "g-", "b-", "c-", "m-", "y-", "k-"};
 
-    plt::plot(tmp2.first, tmp2.second, "r-");
-    plt::plot(tmp.first, tmp.second, "b-");
+    for(int grade = 2; grade <= 15; grade++){
+        Berstein<decltype(f)*> ob2(f2, grade);
+        pair<vector<double>, vector<double>> tmp2 = ob2.generate();
+        string color = colors[grade % colors.size()];
+        plt::plot(tmp2.first, tmp2.second, color);
+       // plt::plot(tmp2.first, tmp2.second, color, "Polinomio de grado " + to_string(grade));
+        //plt::legend();
+    }
 
     plt::show();
 
