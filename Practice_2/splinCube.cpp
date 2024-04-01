@@ -1,4 +1,5 @@
 #include <iostream>
+#include <bits/stdc++.h>
 #include "../matplotlibcpp.h"
 #include <functional> // Necesario para std::function
 #include <vector>
@@ -65,18 +66,47 @@ public:
     }
 };
 
+
+mt19937 rng(chrono::system_clock::now().time_since_epoch().count());
+long long random(long long a, long long b){
+    return a + rng() % (b - a + 1);
+}
+
+const int inf = 10; 
 int main() {
     // Ejemplo de uso
-    vector<double> x = {0, 1, 2, 3, 4};
-    vector<double> y = {0, 1, 8, 27, 64};
+    int nn = 6;
+
+    vector<pair<int, int>>p(nn);
+
+    for(int i = 0; i < nn; i++){
+        p[i] = {random(-inf, inf), 10 * random(-inf, inf)};
+    }
+
+    sort(p.begin(), p.end());
+    vector<double> x(nn);
+    vector<double> y(nn);
+
+    for(int i = 0; i < nn; i++){
+        x[i] = 1.0 * p[i].first;
+        y[i] = 1.0 * p[i].second;
+    }
 
 
+    /*
+    vector<double>x = {1, 2, 3, 4};
+    vector<double>y = {2, 3, 5, 6};
+
+    */
 
     CubicSpline spline(x, y);
 
     const double eps = 0.001;
 
     int n = (int)x.size();
+
+    std::vector<std::string> colors = {"r-", "g-", "b-", "c-", "m-", "y-", "k-"};
+
 
     for(int i = 0; i < n-1; i++){
 
@@ -87,7 +117,9 @@ int main() {
             v.first.push_back(ii);
             v.second.push_back(spline.interpolate(ii, i));
         }
-        plt::plot(v.first, v.second, "r-");
+        string color = colors[i % colors.size()];
+
+        plt::plot(v.first, v.second, color);
     }
     plt::show();
 
