@@ -5,6 +5,9 @@
 #include <vector>
 #include <utility> // Necesario para std::pair
 #include <cmath>
+#include <fstream>
+#include <sstream>
+
 
 namespace plt = matplotlibcpp;
 using namespace std;
@@ -32,7 +35,23 @@ public :
 
 int main(){
 
-    vector<pair<double, double>> points = {{0.0, 0.0}, {1.0, 1.5}, {2.0, 2.0}, {3.3, 0.0}}; // Example points
+    vector<pair<double, double>> points;
+
+    ifstream file("points.txt");
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            istringstream iss(line);
+            double x, y;
+            if (iss >> x >> y) {
+                points.emplace_back(x, y);
+            }
+        }
+        file.close();
+    } else {
+        cerr << "No se pudo abrir el archivo." << endl;
+        return 1;
+    }
 
     pair<vector<double>, vector<double>>v;
 
@@ -43,6 +62,7 @@ int main(){
         v.first.push_back(casteljau.getPoint().first);
         v.second.push_back(casteljau.getPoint().second);
     }
+
     vector<double> x_points, y_points;
     for (auto point : points) {
         x_points.push_back(point.first);
@@ -50,9 +70,6 @@ int main(){
     }
 
     plt::plot(v.first, v.second, "r-");
-    plt::scatter(x_points, y_points, {{"color", "red"}, {"label", "a circle!"}});
-
-
 
     plt::show();
 
